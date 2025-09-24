@@ -1,52 +1,41 @@
 let amigos = [];
 
 function adicionarAmigo() {
-    const nomeInput = document.getElementById("nome");
-    const nome = nomeInput.value.trim();
+    const input = document.getElementById("nome");
+    const nome = input.value.trim();
 
-    if (nome && !amigos.includes(nome)) {
-        amigos.push(nome);
-        nomeInput.value = "";
-        atualizarLista();
-    } else {
-        alert("Nome inválido ou já adicionado.");
+    if (nome === "") {
+        alert("Por favor, insira um nome.");
+        return;
     }
+
+    amigos.push(nome);
+    input.value = "";
+    atualizarLista();
 }
 
 function atualizarLista() {
     const lista = document.getElementById("lista-amigos");
     lista.innerHTML = "";
 
-    amigos.forEach(amigo => {
+    for (let i = 0; i < amigos.length; i++) {
         const li = document.createElement("li");
-        li.textContent = amigo;
+        li.textContent = amigos[i];
         lista.appendChild(li);
-    });
+    }
 }
 
-function sortearAmigoSecreto() {
-    if (amigos.length < 2) {
-        alert("Adicione pelo menos dois amigos.");
+function sortearAmigo() {
+    const resultado = document.getElementById("resultado");
+
+    if (amigos.length === 0) {
+        resultado.innerHTML = "Nenhum amigo para sortear.";
         return;
     }
 
-    let sorteio = [...amigos];
-    let resultado = {};
+    const indice = Math.floor(Math.random() * amigos.length);
+    const nomeSorteado = amigos[indice];
 
-    for (let i = 0; i < amigos.length; i++) {
-        let amigo = amigos[i];
-        let possiveis = sorteio.filter(a => a !== amigo);
-
-        if (possiveis.length === 0) {
-            alert("Não foi possível sortear. Tente novamente.");
-            return;
-        }
-
-        let sorteado = possiveis[Math.floor(Math.random() * possiveis.length)];
-        resultado[amigo] = sorteado;
-        sorteio.splice(sorteio.indexOf(sorteado), 1);
-    }
-
-    console.log("Resultado do sorteio:", resultado);
-    alert("Sorteio realizado! Veja o console para os pares.");
+    resultado.innerHTML = `Amigo sorteado: <strong>${nomeSorteado}</strong>`;
 }
+
